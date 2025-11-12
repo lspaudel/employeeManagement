@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: employeeManagement
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/employeeDB
+server:
+  port:8080
+
