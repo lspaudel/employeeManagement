@@ -2,38 +2,45 @@ package com.example.employeeManagement.controller;
 
 import com.example.employeeManagement.model.Employees;
 import com.example.employeeManagement.service.EmployeeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
-    @Autowired
-    EmployeeService employeeService;
-    @PostMapping("/create")
+
+    private final EmployeeService employeeService;
+
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
+
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Employees createEmployee(@RequestBody Employees employees){
+    public Employees createEmployee(@RequestBody Employees employees) {
         return employeeService.createEmployee(employees);
     }
-    @GetMapping("/fetch/all")
-    public List<Employees> getAllEmployees(){
+
+    @GetMapping
+    public List<Employees> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
-    @GetMapping("/fetch/{id}")
-    public Employees getEmployeeById(@PathVariable("id") String id ){
+
+    @GetMapping("/{id}")
+    public Employees getEmployeeById(@PathVariable String id) {
         return employeeService.getEmployeeById(id);
     }
-    @PutMapping("/update")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public Employees updateEmployee(@RequestBody Employees employees){
-        return employeeService.createEmployee(employees);
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Employees updateEmployee(@PathVariable String id, @RequestBody Employees employees) {
+        return employeeService.updateEmployee(id, employees);
     }
-    @DeleteMapping("/delete/{id}")
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void  deleteEmployee(@PathVariable String id ){
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEmployee(@PathVariable String id) {
         employeeService.deleteEmployee(id);
     }
 }
