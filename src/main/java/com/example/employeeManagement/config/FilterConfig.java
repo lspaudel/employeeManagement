@@ -7,12 +7,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FilterConfig {
     @Bean
-    public FilterRegistrationBean<CustomFilter> registerFilter(CustomFilter customFilter){
-        FilterRegistrationBean<CustomFilter> bean = new FilterRegistrationBean<>();
-        bean.setFilter(customFilter);
+    public FilterRegistrationBean<ApiKeyFilter> registerApiKeyFilter(ApiKeyFilter apiKeyFilter){
+        FilterRegistrationBean<ApiKeyFilter> bean = new FilterRegistrationBean<>();
+        bean.setFilter(apiKeyFilter);
         bean.addUrlPatterns("/employee/*");
         bean.setOrder(1);
         return bean;
-
+    }
+    @Bean
+    FilterRegistrationBean<RequestTimeFilter> registerTimingFilter(RequestTimeFilter requestTimeFilter){
+        FilterRegistrationBean <RequestTimeFilter> bean = new FilterRegistrationBean<>();
+        bean.setFilter(requestTimeFilter);
+        bean.addUrlPatterns("/employee/*");
+        bean.setOrder(2);
+        return bean;
     }
 }
