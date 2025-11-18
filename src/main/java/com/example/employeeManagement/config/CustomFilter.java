@@ -13,7 +13,12 @@ import java.io.IOException;
 public class CustomFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("Filter triggered for " + request.getRequestURI());
+        System.out.println("Incoming request: " + request.getMethod() + " " + request.getRequestURI() );
+        if (request.getHeader("x-api-key") == null){
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("API key is missing");
+            return;
+        }
         filterChain.doFilter(request, response);
     }
 }
