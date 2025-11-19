@@ -2,6 +2,7 @@ package com.example.employeeManagement.controller;
 
 import com.example.employeeManagement.model.Employees;
 import com.example.employeeManagement.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -18,7 +19,7 @@ public class EmployeeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Employees createEmployee(@RequestBody Employees employees) {
+    public Employees createEmployee(@Valid @RequestBody Employees employees) {
         return employeeService.createEmployee(employees);
     }
 
@@ -34,7 +35,7 @@ public class EmployeeController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Employees updateEmployee(@PathVariable String id, @RequestBody Employees employees) {
+    public Employees updateEmployee(@PathVariable String id, @Valid @RequestBody Employees employees) {
         return employeeService.updateEmployee(id, employees);
     }
 
