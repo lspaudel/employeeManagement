@@ -22,4 +22,9 @@ public class Employees {
     private String lastName;
 //    @Min(value = 14, message = "Employee should be at least 14 years of age")
     private int age;
+
+    private String email;
+    private String phoneNumber;
+    private String department;
+    private double salary;
 }

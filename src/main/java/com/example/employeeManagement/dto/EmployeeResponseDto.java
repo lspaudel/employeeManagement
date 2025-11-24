@@ -9,4 +9,9 @@ public class EmployeeResponseDto {
     private String firstName;
     private String lastName;
     private int age;
+
+    private String email;
+    private String phoneNumber;
+    private String department;
+    private double salary;
 }

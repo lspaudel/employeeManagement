@@ -9,8 +9,13 @@ public class EmployeeMapper {
     public static Employees toModel(EmployeeRequestDto employeeRequestDto){
         Employees employees = new Employees();
         employees.setFirstName(employeeRequestDto.getFirstName());
-        employees.setLastName(employeeRequestDto.getFirstName());
+        employees.setLastName(employeeRequestDto.getLastName());
         employees.setAge(employeeRequestDto.getAge());
+        employees.setEmail(employeeRequestDto.getEmail());
+        employees.setPhoneNumber(employeeRequestDto.getPhoneNumber());
+        employees.setDepartment(employeeRequestDto.getDepartment());
+        employees.setSalary(employeeRequestDto.getSalary());
+
         return employees;
 
     }
@@ -21,6 +26,10 @@ public class EmployeeMapper {
         employeeResponseDto.setFirstName(employees.getFirstName());
         employeeResponseDto.setLastName(employees.getLastName());
         employeeResponseDto.setAge(employees.getAge());
+        employeeResponseDto.setEmail(employees.getEmail());
+        employeeResponseDto.setPhoneNumber(employees.getPhoneNumber());
+        employeeResponseDto.setDepartment(employees.getDepartment());
+        employeeResponseDto.setSalary(employees.getSalary());
         return employeeResponseDto;
     }
 }
