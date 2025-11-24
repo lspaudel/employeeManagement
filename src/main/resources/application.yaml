@@ -4,6 +4,9 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/employeeDB
+  Jackson:
+    deserialization:
+      fail-on-unknown-properties: true
 server:
   port:8080
 
