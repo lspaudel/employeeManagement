@@ -16,10 +16,10 @@ public class Employees {
     private String id;
 
 //    @Field("emp_name")
-    @NotBlank(message = "First name cannot be empty")
+//    @NotBlank(message = "First name cannot be empty")
     private String firstName;
-    @NotBlank(message ="Last name cannot be empty")
+//    @NotBlank(message ="Last name cannot be empty")
     private String lastName;
-    @Min(value = 14, message = "Employee should be at least 14 years of age")
+//    @Min(value = 14, message = "Employee should be at least 14 years of age")
     private int age;
 }

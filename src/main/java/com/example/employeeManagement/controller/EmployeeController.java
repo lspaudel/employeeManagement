@@ -1,5 +1,8 @@
 package com.example.employeeManagement.controller;
 
+import com.example.employeeManagement.dto.EmployeeRequestDto;
+import com.example.employeeManagement.dto.EmployeeResponseDto;
+import com.example.employeeManagement.mapper.EmployeeMapper;
 import com.example.employeeManagement.model.Employees;
 import com.example.employeeManagement.service.EmployeeService;
 import jakarta.validation.Valid;
@@ -19,24 +22,33 @@ public class EmployeeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Employees createEmployee(@Valid @RequestBody Employees employees) {
-        return employeeService.createEmployee(employees);
+    public EmployeeResponseDto createEmployee(@Valid @RequestBody EmployeeRequestDto employeeRequestDto) {
+        Employees employees = EmployeeMapper.toModel(employeeRequestDto);
+        Employees saved = employeeService.createEmployee(employees);
+        System.out.println("DTO endpoint hit");
+        return EmployeeMapper.toDto(saved);
     }
 
     @GetMapping
-    public List<Employees> getAllEmployees() {
-        return employeeService.getAllEmployees();
+    public List<EmployeeResponseDto> getAllEmployees() {
+        return employeeService.getAllEmployees()
+                .stream()
+                .map(EmployeeMapper::toDto)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public Employees getEmployeeById(@PathVariable String id) {
-        return employeeService.getEmployeeById(id);
+    public EmployeeResponseDto getEmployeeById(@PathVariable String id) {
+        Employees employees = employeeService.getEmployeeById(id);
+        return EmployeeMapper.toDto(employees);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Employees updateEmployee(@PathVariable String id, @Valid @RequestBody Employees employees) {
-        return employeeService.updateEmployee(id, employees);
+    public EmployeeResponseDto updateEmployee(@PathVariable String id, @Valid @RequestBody EmployeeRequestDto employeeRequestDto) {
+        Employees employees =  EmployeeMapper.toModel(employeeRequestDto);
+        Employees updated = employeeService.updateEmployee(id, employees);
+        return EmployeeMapper.toDto(updated);
     }
 
     @DeleteMapping("/{id}")
