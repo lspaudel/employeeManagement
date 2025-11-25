@@ -5,6 +5,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 public interface EmployeeRepository extends MongoRepository <Employees, String> {
-//    @Query(value = "{ 'email': { $regex: ?0, $options: 'i' } }") // case-insensitive
-    boolean existsByEmail(String email);
+    @Query(value = "{ 'email': { $regex: ?0, $options: 'i' } }", count = true) // case-insensitive
+    long countByEmailIgnoreCase(String email);
+
+//    boolean existsByEmail(String email);
 }

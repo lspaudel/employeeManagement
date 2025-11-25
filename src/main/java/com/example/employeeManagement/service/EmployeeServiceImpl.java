@@ -24,7 +24,8 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new ConflictException("Employee ID already exists: " + employees.getId());
         }
         // Check email conflict
-        if (employees.getEmail() != null && employeeRepository.existsByEmail(employees.getEmail())) {
+        boolean emailExists = employeeRepository.countByEmailIgnoreCase(employees.getEmail())>0;
+        if (emailExists) {
             throw new ConflictException("Employee email already exists: " + employees.getEmail());
         }
         return employeeRepository.save(employees);
