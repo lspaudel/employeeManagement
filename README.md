@@ -1,9 +1,10 @@
 # Employee Management System
 
-An effortless **Spring Boot** application to manage employees using **MongoDB**. It supports basic CRUD operations.
+An effortless **Spring Boot** application to manage employees using **MongoDB**. It provides a RESTful API with full CRUD support and proper error handling.
 
 - Create, read, update, and delete employees
-- Error handling for missing employees
+- Input validation and error handling
+- Consistent JSON responses for success and errors
 - RESTful API design
 
 ---
@@ -21,14 +22,17 @@ cd employeeManagement
  ```bash
   ./gradlew bootRun        # for Gradle
 ```
-4. Access the API at: `http://localhost:8080/employee`
+4. Access the API at: `http://localhost:8080/employees`
    
    Example JSON:
    ```bash
-     {
-    "id": "1",
-    "firstName": "Hari",
-    "lastName": "Gautam",
-    "age": 50
+    { 
+   "firstName": "Laxman",
+   "lastName": "Paudel",
+   "age": 39,
+   "email": "laxman.paudel@test.com",
+   "phoneNumber": "9845284711",
+   "department": "IT",
+   "salary": 10000.00
    }
    ```
