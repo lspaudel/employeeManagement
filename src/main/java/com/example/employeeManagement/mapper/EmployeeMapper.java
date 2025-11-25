@@ -22,14 +22,14 @@ public class EmployeeMapper {
 
     public static EmployeeResponseDto toDto(Employees employees){
         EmployeeResponseDto employeeResponseDto = new EmployeeResponseDto();
-        employeeResponseDto.setId(employees.getId());
+//        employeeResponseDto.setId(employees.getId());
         employeeResponseDto.setFirstName(employees.getFirstName());
         employeeResponseDto.setLastName(employees.getLastName());
-        employeeResponseDto.setAge(employees.getAge());
+//        employeeResponseDto.setAge(employees.getAge());
         employeeResponseDto.setEmail(employees.getEmail());
-        employeeResponseDto.setPhoneNumber(employees.getPhoneNumber());
+//        employeeResponseDto.setPhoneNumber(employees.getPhoneNumber());
         employeeResponseDto.setDepartment(employees.getDepartment());
-        employeeResponseDto.setSalary(employees.getSalary());
+//        employeeResponseDto.setSalary(employees.getSalary());
         return employeeResponseDto;
     }
     public static void updateEntityFromDto(EmployeeRequestDto dto, Employees existing) {
