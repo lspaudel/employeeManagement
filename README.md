@@ -22,7 +22,7 @@ cd employeeManagement
  ```bash
   ./gradlew bootRun        # for Gradle
 ```
-4. Access the API at: `http://localhost:8080/employees`
+4. Access the API at: `http://localhost:8080/api/employees`
    
    Example JSON:
    ```bash
