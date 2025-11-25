@@ -1,9 +1,6 @@
 package com.example.employeeManagement.service;
 
-import com.example.employeeManagement.exception.DatabaseConnectionException;
-import com.example.employeeManagement.exception.DuplicateEmployeeIdException;
-import com.example.employeeManagement.exception.EmployeeNotFoundException;
-import com.example.employeeManagement.exception.InvalidIdFormatException;
+import com.example.employeeManagement.exception.*;
 import com.example.employeeManagement.model.Employees;
 import com.example.employeeManagement.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
@@ -21,61 +18,58 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employees createEmployee(Employees employees) {
-        try {
-            employeeRepository.save(employees);
-        } catch (Exception e) {
-            throw new DatabaseConnectionException("Database error while saving employee", e);
+
+        // Check ID conflict if user provides an ID
+        if (employees.getId() != null && employeeRepository.existsById(employees.getId())) {
+            throw new ConflictException("Employee ID already exists: " + employees.getId());
+        }
+        // Check email conflict
+        if (employees.getEmail() != null && employeeRepository.existsByEmail(employees.getEmail())) {
+            throw new ConflictException("Employee email already exists: " + employees.getEmail());
         }
         return employeeRepository.save(employees);
     }
 
     @Override
     public Employees getEmployeeById(String id) {
-        if (id == null || id.isBlank()) {
-            throw new InvalidIdFormatException("Employee id cannot be empty");
-        }
+        validateId(id);
+
         return employeeRepository.findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee ID not found: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Employee ID not found: " + id));
     }
 
     @Override
     public List<Employees> getAllEmployees() {
+        return employeeRepository.findAll();
+    }
+
+    @Override
+    public Employees updateEmployee(Employees existing) {
         try {
-            return employeeRepository.findAll();
+            return employeeRepository.save(existing);
         } catch (Exception e) {
-            throw new DatabaseConnectionException("unable to fetch employee", e);
+            throw new DatabaseException("Database error while updating employee");
         }
     }
 
     @Override
-    public Employees updateEmployee(String id, Employees updatedEmployee) {
-        if (id == null || id.isBlank()){
-            throw new InvalidIdFormatException("Employee id cannot be empty");
-        }
-        Employees existing = employeeRepository.findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee ID not found: " + id));
-
-        if (!id.equals(updatedEmployee.getId()) && employeeRepository.existsById(updatedEmployee.getId())){
-            throw new DuplicateEmployeeIdException("Employee ID already exists: " + updatedEmployee.getId());
-        }
-
-        existing.setFirstName(updatedEmployee.getFirstName());
-        existing.setLastName(updatedEmployee.getLastName());
-        existing.setAge(updatedEmployee.getAge());
-        existing.setId(updatedEmployee.getId());
-
-        return employeeRepository.save(existing);
-    }
-
-    @Override
-    public void deleteEmployee(String id) {
-        if (id == null || id.isBlank()) {
-            throw new InvalidIdFormatException("Employee ID cannot be empty");
-        }
+    public String deleteEmployee(String id) {
+        validateId(id);
 
         if (!employeeRepository.existsById(id)) {
-            throw new EmployeeNotFoundException("Employee not found: " + id);
+            throw new ResourceNotFoundException("Employee not found: " + id);
         }
         employeeRepository.deleteById(id);
+        return "Employee with ID " + id + " has been successfully deleted.";
+    }
+
+    // -----------------------
+    // Helper method
+    // -----------------------
+
+    private void validateId(String id) {
+        if (id == null || id.isBlank()) {
+            throw new InvalidRequestException("Employee id cannot be empty");
+        }
     }
 }

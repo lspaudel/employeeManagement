@@ -32,4 +32,14 @@ public class EmployeeMapper {
         employeeResponseDto.setSalary(employees.getSalary());
         return employeeResponseDto;
     }
+    public static void updateEntityFromDto(EmployeeRequestDto dto, Employees existing) {
+        existing.setFirstName(dto.getFirstName());
+        existing.setLastName(dto.getLastName());
+        existing.setAge(dto.getAge());
+        existing.setEmail(dto.getEmail());
+        existing.setPhoneNumber(dto.getPhoneNumber());
+        existing.setDepartment(dto.getDepartment());
+        existing.setSalary(dto.getSalary());
+        // Do NOT set ID
+    }
 }

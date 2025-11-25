@@ -7,11 +7,15 @@ import com.example.employeeManagement.model.Employees;
 import com.example.employeeManagement.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/employee")
+@RequestMapping("/employees")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
@@ -21,39 +25,46 @@ public class EmployeeController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public EmployeeResponseDto createEmployee(@Valid @RequestBody EmployeeRequestDto employeeRequestDto) {
-        Employees employees = EmployeeMapper.toModel(employeeRequestDto);
-        Employees saved = employeeService.createEmployee(employees);
-        System.out.println("DTO endpoint hit");
-        return EmployeeMapper.toDto(saved);
+    public ResponseEntity<EmployeeResponseDto> createEmployee(
+            @Valid @RequestBody EmployeeRequestDto requestDto) {
+        Employees employee = EmployeeMapper.toModel(requestDto);
+        Employees savedEmployee = employeeService.createEmployee(employee);
+        EmployeeResponseDto responseDto = EmployeeMapper.toDto(savedEmployee);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @GetMapping
-    public List<EmployeeResponseDto> getAllEmployees() {
-        return employeeService.getAllEmployees()
+    public ResponseEntity<List<EmployeeResponseDto>> getAllEmployees() {
+        List<EmployeeResponseDto> employees = employeeService.getAllEmployees()
                 .stream()
                 .map(EmployeeMapper::toDto)
                 .toList();
+        return ResponseEntity.ok(employees);
     }
 
     @GetMapping("/{id}")
-    public EmployeeResponseDto getEmployeeById(@PathVariable String id) {
-        Employees employees = employeeService.getEmployeeById(id);
-        return EmployeeMapper.toDto(employees);
+    public ResponseEntity<EmployeeResponseDto> getEmployeeById(@PathVariable String id) {
+        Employees employee = employeeService.getEmployeeById(id);
+        return ResponseEntity.ok(EmployeeMapper.toDto(employee));
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public EmployeeResponseDto updateEmployee(@PathVariable String id, @Valid @RequestBody EmployeeRequestDto employeeRequestDto) {
-        Employees employees =  EmployeeMapper.toModel(employeeRequestDto);
-        Employees updated = employeeService.updateEmployee(id, employees);
-        return EmployeeMapper.toDto(updated);
+    public ResponseEntity<EmployeeResponseDto> updateEmployee(
+            @PathVariable String id,
+            @Valid @RequestBody EmployeeRequestDto requestDto) {
+
+        Employees existing = employeeService.getEmployeeById(id);
+        EmployeeMapper.updateEntityFromDto(requestDto, existing);
+        Employees updated = employeeService.updateEmployee(existing);
+
+        return ResponseEntity.ok(EmployeeMapper.toDto(updated));
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteEmployee(@PathVariable String id) {
-        employeeService.deleteEmployee(id);
+    public ResponseEntity<Map<String, String>> deleteEmployee(@PathVariable String id) {
+        String message = employeeService.deleteEmployee(id);
+        Map<String, String> response =  new HashMap<>();
+        response.put("message",message);
+        return ResponseEntity.ok(response);
     }
 }

@@ -10,6 +10,6 @@ public interface EmployeeService {
     Employees createEmployee(Employees employees);
     List<Employees> getAllEmployees();
     Employees getEmployeeById(String id);
-    void deleteEmployee(String id);
-    Employees updateEmployee(String id, Employees employees);
+    String deleteEmployee(String id);
+    Employees updateEmployee(Employees existing);
 }
