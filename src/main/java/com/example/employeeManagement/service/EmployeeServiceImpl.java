@@ -3,6 +3,8 @@ package com.example.employeeManagement.service;
 import com.example.employeeManagement.exception.*;
 import com.example.employeeManagement.model.Employees;
 import com.example.employeeManagement.repository.EmployeeRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,6 +44,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<Employees> getAllEmployees() {
         return employeeRepository.findAll();
+    }
+
+    @Override
+    public Page<Employees> getEmployees(Pageable pageable) {
+        return employeeRepository.findAll(pageable);
     }
 
     @Override

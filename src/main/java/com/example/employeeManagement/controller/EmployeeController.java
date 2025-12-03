@@ -6,6 +6,8 @@ import com.example.employeeManagement.mapper.EmployeeMapper;
 import com.example.employeeManagement.model.Employees;
 import com.example.employeeManagement.service.EmployeeService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,13 +35,19 @@ public class EmployeeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<EmployeeResponseDto>> getAllEmployees() {
         List<EmployeeResponseDto> employees = employeeService.getAllEmployees()
                 .stream()
                 .map(EmployeeMapper::toDto)
                 .toList();
         return ResponseEntity.ok(employees);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<Employees>> getEmployees(Pageable pageable){
+        Page<Employees> page = employeeService.getEmployees(pageable);
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/{id}")
