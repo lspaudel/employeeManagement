@@ -20,7 +20,7 @@ cd employeeManagement
 
 3. Run the project:
  ```bash
-  ./gradlew bootRun        # for Gradle
+  ./gradlew bootRun    
 ```
 4. Access the API at: `http://localhost:8080/api/employees`
    
