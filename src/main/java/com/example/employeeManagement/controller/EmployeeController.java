@@ -7,6 +7,7 @@ import com.example.employeeManagement.model.Employees;
 import com.example.employeeManagement.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,19 +36,26 @@ public class EmployeeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<EmployeeResponseDto>> getAllEmployees() {
-        List<EmployeeResponseDto> employees = employeeService.getAllEmployees()
-                .stream()
-                .map(EmployeeMapper::toDto)
-                .toList();
-        return ResponseEntity.ok(employees);
-    }
-
     @GetMapping
-    public ResponseEntity<Page<Employees>> getEmployees(Pageable pageable){
-        Page<Employees> page = employeeService.getEmployees(pageable);
-        return ResponseEntity.ok(page);
+    public ResponseEntity<?> getEmployees(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
+
+        // If page or size is missing, return full list
+        if (page == null || size == null) {
+            List<EmployeeResponseDto> employees = employeeService.getAllEmployees()
+                    .stream()
+                    .map(EmployeeMapper::toDto)
+                    .toList();
+            return ResponseEntity.ok(employees);
+        }
+
+        // Otherwise, return paginated results
+        Pageable pageable = PageRequest.of(page, size);
+        Page<EmployeeResponseDto> employeesPage = employeeService.getEmployees(pageable)
+                .map(EmployeeMapper::toDto);
+
+        return ResponseEntity.ok(employeesPage);
     }
 
     @GetMapping("/{id}")
