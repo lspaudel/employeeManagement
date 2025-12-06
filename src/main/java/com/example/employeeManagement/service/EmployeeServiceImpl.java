@@ -3,14 +3,16 @@ package com.example.employeeManagement.service;
 import com.example.employeeManagement.exception.*;
 import com.example.employeeManagement.model.Employees;
 import com.example.employeeManagement.repository.EmployeeRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Slf4j
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
+    //    private static final Logger log = LoggerFactory.getLogger(EmployeeServiceImpl.class);
 
     private final EmployeeRepository employeeRepository;
 
@@ -20,17 +22,24 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employees createEmployee(Employees employees) {
+        log.info("Creating employee: firstName={}, email={}",
+                employees.getFirstName(), employees.getEmail());
 
         // Check ID conflict if user provides an ID
         if (employees.getId() != null && employeeRepository.existsById(employees.getId())) {
+            log.warn("ID conflict for id={}", employees.getId());
             throw new ConflictException("Employee ID already exists: " + employees.getId());
         }
         // Check email conflict
         boolean emailExists = employeeRepository.countByEmailIgnoreCase(employees.getEmail())>0;
         if (emailExists) {
+            log.warn("Email conflict for email={}", employees.getEmail());
             throw new ConflictException("Employee email already exists: " + employees.getEmail());
         }
-        return employeeRepository.save(employees);
+
+        Employees saved = employeeRepository.save(employees);
+        log.info("Employee created with id={}", saved.getId());
+        return saved;
     }
 
     @Override
