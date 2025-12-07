@@ -27,13 +27,20 @@ cd employeeManagement
    The application supports request tracing via the X-Request-ID header. If you don't provide one, a unique ID will be generated automatically.  
    Example JSON:
    ```bash
-    { 
-   "firstName": "Laxman",
-   "lastName": "Paudel",
-   "age": 39,
-   "email": "laxman.paudel@test.com",
-   "phoneNumber": "9845284711",
-   "department": "IT",
-   "salary": 10000.00
-   }
-   ```
+    curl -X POST http://localhost:8080/api/employees \
+    -H "Content-Type: application/json" \
+    -H "X-Request-ID: 123e4567-e89b-12d3-a456-426614174000" \
+    -d '{
+    "firstName": "Laxman",
+    "lastName": "Paudel",
+    "age": 39,
+    "email": "laxman.paudel@test.com",
+    "phoneNumber": "9845284711",
+    "department": "IT",
+    "salary": 10000.00
+    }'
+    ```
+   ```bash
+    curl -X GET http://localhost:8080/api/employees \
+         -H "X-Request-ID: 123e4567-e89b-12d3-a456-426614174000"
+```
