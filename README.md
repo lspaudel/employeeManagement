@@ -5,6 +5,7 @@ An effortless **Spring Boot** application to manage employees using **MongoDB**.
 - Create, read, update, and delete employees
 - Input validation and error handling
 - Consistent JSON responses for success and errors
+- Request tracing using **MDC** (`requestId` and `userId`)
 - RESTful API design
 
 ---
@@ -22,8 +23,8 @@ cd employeeManagement
  ```bash
   ./gradlew bootRun    
 ```
-4. Access the API at: `http://localhost:8080/api/employees`
-   
+4. Access the API at: `http://localhost:8080/api/employees`  
+   The application supports request tracing via the X-Request-ID header. If you don't provide one, a unique ID will be generated automatically.  
    Example JSON:
    ```bash
     { 
