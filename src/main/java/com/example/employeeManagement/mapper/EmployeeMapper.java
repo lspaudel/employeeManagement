@@ -3,10 +3,12 @@ package com.example.employeeManagement.mapper;
 import com.example.employeeManagement.dto.EmployeeRequestDto;
 import com.example.employeeManagement.dto.EmployeeResponseDto;
 import com.example.employeeManagement.model.Employees;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EmployeeMapper {
 
-    public static Employees toModel(EmployeeRequestDto employeeRequestDto){
+    public Employees toModel(EmployeeRequestDto employeeRequestDto){
         Employees employees = new Employees();
         employees.setFirstName(employeeRequestDto.getFirstName());
         employees.setLastName(employeeRequestDto.getLastName());
@@ -20,7 +22,7 @@ public class EmployeeMapper {
 
     }
 
-    public static EmployeeResponseDto toDto(Employees employees){
+    public EmployeeResponseDto toDto(Employees employees){
         EmployeeResponseDto employeeResponseDto = new EmployeeResponseDto();
 //        employeeResponseDto.setId(employees.getId());
         employeeResponseDto.setFirstName(employees.getFirstName());
@@ -32,7 +34,7 @@ public class EmployeeMapper {
 //        employeeResponseDto.setSalary(employees.getSalary());
         return employeeResponseDto;
     }
-    public static void updateEntityFromDto(EmployeeRequestDto dto, Employees existing) {
+    public void updateEntityFromDto(EmployeeRequestDto dto, Employees existing) {
         existing.setFirstName(dto.getFirstName());
         existing.setLastName(dto.getLastName());
         existing.setAge(dto.getAge());
