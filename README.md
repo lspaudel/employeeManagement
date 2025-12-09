@@ -46,5 +46,4 @@ cd employeeManagement
    ```
 5. Swagger / OpenAPI Documentation
 
-It also integrates Swagger UI using `springdoc-openapi-starter-webmvc-ui` version 2.7.0.  
-All REST endpoints under `/api/employees` are automatically documented and can be tested via the Swagger UI at `http://localhost:8080/swagger-ui/index.html`.
+It also integrates Swagger UI using `springdoc-openapi-starter-webmvc-ui` version 2.7.0. All REST endpoints under `/api/employees` are automatically documented and can be tested via the Swagger UI at `http://localhost:8080/swagger-ui/index.html`.
