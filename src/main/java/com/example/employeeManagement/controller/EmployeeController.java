@@ -22,17 +22,19 @@ import java.util.Map;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
+    private final EmployeeMapper employeeMapper;
 
-    public EmployeeController(EmployeeService employeeService) {
+    public EmployeeController(EmployeeService employeeService, EmployeeMapper employeeMapper) {
         this.employeeService = employeeService;
+        this.employeeMapper = employeeMapper;
     }
 
     @PostMapping
     public ResponseEntity<EmployeeResponseDto> createEmployee(
             @Valid @RequestBody EmployeeRequestDto requestDto) {
-        Employees employee = EmployeeMapper.toModel(requestDto);
+        Employees employee = employeeMapper.toModel(requestDto);
         Employees savedEmployee = employeeService.createEmployee(employee);
-        EmployeeResponseDto responseDto = EmployeeMapper.toDto(savedEmployee);
+        EmployeeResponseDto responseDto = employeeMapper.toDto(savedEmployee);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
@@ -45,7 +47,7 @@ public class EmployeeController {
         if (page == null || size == null) {
             List<EmployeeResponseDto> employees = employeeService.getAllEmployees()
                     .stream()
-                    .map(EmployeeMapper::toDto)
+                    .map(employeeMapper::toDto)
                     .toList();
             return ResponseEntity.ok(employees);
         }
@@ -53,7 +55,7 @@ public class EmployeeController {
         // Otherwise, return paginated results
         Pageable pageable = PageRequest.of(page, size);
         Page<EmployeeResponseDto> employeesPage = employeeService.getEmployees(pageable)
-                .map(EmployeeMapper::toDto);
+                .map(employeeMapper::toDto);
 
         return ResponseEntity.ok(employeesPage);
     }
@@ -61,7 +63,7 @@ public class EmployeeController {
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeResponseDto> getEmployeeById(@PathVariable String id) {
         Employees employee = employeeService.getEmployeeById(id);
-        return ResponseEntity.ok(EmployeeMapper.toDto(employee));
+        return ResponseEntity.ok(employeeMapper.toDto(employee));
     }
 
     @PutMapping("/{id}")
@@ -70,10 +72,10 @@ public class EmployeeController {
             @Valid @RequestBody EmployeeRequestDto requestDto) {
 
         Employees existing = employeeService.getEmployeeById(id);
-        EmployeeMapper.updateEntityFromDto(requestDto, existing);
+        employeeMapper.updateEntityFromDto(requestDto, existing);
         Employees updated = employeeService.updateEmployee(existing);
 
-        return ResponseEntity.ok(EmployeeMapper.toDto(updated));
+        return ResponseEntity.ok(employeeMapper.toDto(updated));
     }
 
     @DeleteMapping("/{id}")
