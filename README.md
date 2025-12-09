@@ -44,3 +44,7 @@ cd employeeManagement
     curl -X GET http://localhost:8080/api/employees \
          -H "X-Request-ID: 123e4567-e89b-12d3-a456-426614174000"
    ```
+5. Swagger / OpenAPI Documentation
+
+It also integrates Swagger UI using `springdoc-openapi-starter-webmvc-ui` version 2.7.0.  
+All REST endpoints under `/api/employees` are automatically documented and can be tested via the Swagger UI at `http://localhost:8080/swagger-ui/index.html`.
