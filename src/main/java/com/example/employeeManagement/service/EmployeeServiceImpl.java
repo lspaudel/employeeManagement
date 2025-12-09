@@ -62,9 +62,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employees updateEmployee(Employees existing) {
+        log.info("Updating employee with id = {}", existing.getId());
         try {
             return employeeRepository.save(existing);
         } catch (Exception e) {
+            log.error("Error updating employee with id = {}", existing.getId(), e);
             throw new DatabaseException("Database error while updating employee");
         }
     }
