@@ -1,16 +1,18 @@
 package com.example.employeeManagement.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 
 @Component
-public class JwtUtil {
+public class JwtUtils {
 
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    private final long expiration = 1000 * 60 * 60;
+    @Value("${jwt.expiration}")
+    private long expiration;
 
     public String generateToken(String username, String role){
         return Jwts.builder()
@@ -29,5 +31,8 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
 
+    }
+    public long getExpirationTime() {
+        return expiration / 1000; // return seconds
     }
 }

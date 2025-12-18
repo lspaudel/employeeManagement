@@ -17,10 +17,10 @@ import java.util.List;
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private final JwtUtil jwtUtil;
+    private final JwtUtils jwtUtils;
 
-    public JwtAuthFilter(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
+    public JwtAuthFilter(JwtUtils jwtUtils) {
+        this.jwtUtils = jwtUtils;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String token = header.substring(7);
 
             try {
-                Claims claims = jwtUtil.extractClaims(token);
+                Claims claims = jwtUtils.extractClaims(token);
 
                 String username = claims.getSubject();
                 String role = claims.get("role", String.class);

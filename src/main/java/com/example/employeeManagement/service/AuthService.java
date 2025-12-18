@@ -1,8 +1,10 @@
 package com.example.employeeManagement.service;
 
+import com.example.employeeManagement.dto.LoginResult;
+import com.example.employeeManagement.exception.ConflictException;
 import com.example.employeeManagement.model.User;
 import com.example.employeeManagement.repository.UserRepository;
-import com.example.employeeManagement.security.JwtUtil;
+import com.example.employeeManagement.security.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,10 +14,10 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final UserRepository userRepository;
-    private final JwtUtil jwtUtil;
+    private final JwtUtils jwtUtils;
     private final PasswordEncoder passwordEncoder;
 
-    public String login(String username, String password) {
+    public LoginResult login(String username, String password) {
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Invalid username or password"));
@@ -24,10 +26,14 @@ public class AuthService {
             throw new RuntimeException("Invalid username or password");
         }
 
-        return jwtUtil.generateToken(user.getUsername(), user.getRole());
+       String token = jwtUtils.generateToken(user.getUsername(), user.getRole());
+       return new LoginResult(token, jwtUtils.getExpirationTime(), user);
     }
 
     public User register(User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new ConflictException("User already exists: " + user.getUsername());
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }

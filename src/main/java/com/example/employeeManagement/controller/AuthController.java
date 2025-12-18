@@ -1,8 +1,13 @@
 package com.example.employeeManagement.controller;
 
+import com.example.employeeManagement.dto.AuthResponse;
+import com.example.employeeManagement.dto.LoginResult;
+import com.example.employeeManagement.dto.UserSummary;
 import com.example.employeeManagement.model.User;
 import com.example.employeeManagement.service.AuthService;
 import lombok.Data;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,13 +21,33 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request) {
-        return authService.login(request.getUsername(), request.getPassword());
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
+        LoginResult result = authService.login(
+                request.getUsername(),
+                request.getUsername()
+        );
+        AuthResponse response = new AuthResponse(
+                result.getAccessToken(),
+                "Bearer",
+                result.getExpiresIn(),
+                new UserSummary(
+                        result.getUser().getId(),
+                        result.getUser().getUsername(),
+                        result.getUser().getRole()
+                )
+        );
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register")
-    public User register(@RequestBody User user) {
-        return authService.register(user);
+    public ResponseEntity<UserSummary> register(@RequestBody User user) {
+        User savedUser = authService.register(user);
+        UserSummary summary = new UserSummary(
+                savedUser.getId(),
+                savedUser.getUsername(),
+                savedUser.getRole()
+        );
+      return ResponseEntity.status(HttpStatus.CREATED).body(summary);
     }
 }
 

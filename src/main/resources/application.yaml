@@ -9,6 +9,8 @@ spring:
       fail-on-unknown-properties: true
 server:
   port:8080
+jwt:
+  expiration: 360000
 
 logging:
   level:
