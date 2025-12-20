@@ -24,7 +24,7 @@ public class AuthController {
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         LoginResult result = authService.login(
                 request.getUsername(),
-                request.getUsername()
+                request.getPassword()
         );
         AuthResponse response = new AuthResponse(
                 result.getAccessToken(),
